@@ -23,6 +23,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('conn_test/', include('conn_test.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:
