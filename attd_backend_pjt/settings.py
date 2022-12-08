@@ -16,6 +16,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# 유저모델 사용 지정
+AUTH_USER_MODEL = 'members.Member'
 
 # Application definition
 
