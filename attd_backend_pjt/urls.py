@@ -4,6 +4,8 @@ from django.urls import path, re_path
 from django.urls.conf import include
 
 from rest_framework import routers, permissions
+
+# swagger setting
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -23,7 +25,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('conn_test/', include('conn_test.urls')),
-    path('accounts/', include('accounts.urls')),
+    
+    # app path
+    path('members/', include('members.urls')),
 ]
 
 if settings.DEBUG:
