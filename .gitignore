@@ -1,1 +1,3 @@
 db.sqlite3
+members/migrations/
+attd_backend_pjt/settings.py

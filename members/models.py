@@ -22,7 +22,7 @@ class MemberManager(BaseUserManager) :
         주어진 mem_id와 password로 Member 인스턴스 생성
         단, 최상위 사용자이므로 권한을 부여
         """
-        member = self.create_user(
+        member = self.create_user(                                
             mem_id=mem_id,
             password=password
         )
@@ -31,7 +31,7 @@ class MemberManager(BaseUserManager) :
         return member
 
 class Member(AbstractBaseUser):
-    mem_id = models.CharField("아이디", primary_key=True, max_length=10)
+    mem_id = models.CharField("사원번호", primary_key=True, max_length=10)
     mem_name = models.CharField("이름", max_length=10, null=True)
     mem_birth = models.DateTimeField("생년월일", null=True)
     mem_mail_addr = models.EmailField("이메일", max_length=100, unique=True, null=True)
@@ -48,7 +48,7 @@ class Member(AbstractBaseUser):
 
     USERNAME_FIELD = 'mem_id'
 
-    object = MemberManager()
+    objects = MemberManager()
 
     class Meta:
         db_table = 'member'

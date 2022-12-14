@@ -19,3 +19,5 @@ class MemberSignupSerializer(serializers.ModelSerializer) :
         member.set_password(password)
         member.save()
         return member
+
+

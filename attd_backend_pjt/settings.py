@@ -29,15 +29,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # local app
-    'conn_test',
-    'members',
-
     # third-party
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'drf_yasg',
+
+    # local app
+    'conn_test',
+    'members',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES' : [ # 기본적인 view 접근 권한 지정
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.AllowAny', # FIXME: rest_framework.permissions.IsAuthenticated
+        # 'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [ # token을 인증할 클래스 설정
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -147,6 +148,36 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser'
     ]
 }
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME' : timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME' : timedelta(days=1),
+    'ROTATE_REFRESH_TOKEN': False,  # True면 TokenRefreshView시 새로운 토큰을 반환
+    'BLACKLIST_AFTER_ROTATE' : False,
+    'UPDATE_LAST_LOGIN' : True, # True면 로그인시 auth_user테이블의 last_login필드가 업데이트 됨
+
+    'ALGORITHM' : "HS256",
+    'SIGNING_KEY' : SECRET_KEY,
+    'AUDIENCE' : None,
+    'ISSUER' : None,
+    'JWT_URL' : None,
+    'LEEWAY' : 0,
+
+    'AUTH_HEADER_TYPES' : ('Bearer',),
+    'AUTH_HEADER_NAME' : 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD' : 'mem_id', # 아이디 식별을 위한 auth_user 테이블의 컬럼 이름
+    'USER_ID_CLAIM' : 'mem_id',
+    'USER_AUTHENTICATIONS_RULE' :'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES' : ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM' : 'token_type',
+    'TOKEN_USER_CLASS' : 'test_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM' : 'jti'
+}
+
 
 # CORS_ALLOWED_ORIGINS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True # FIXME: 모든 주소 허용 상태
