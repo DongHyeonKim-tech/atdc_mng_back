@@ -1,71 +1,65 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from authority.models import User
 
-# Create your models here.
-class MemberManager(BaseUserManager) :
-    def create_user(self, mem_id, password=None):
-        """
-        주어진 mem_id와 password로 Member 인스턴스 생성
-        """
-        if not mem_id:
-            raise ValueError(_('Members must have an mem_id'))
+# 직책 코드
+class PositionCd(models.Model):
+    position_cd = models.CharField(unique=True, max_length=10, help_text='직책 코드')
+    position_nm = models.CharField(max_length=20, null=True, help_text='직책 이름')
+    create_dt = models.DateTimeField(auto_now_add=True, help_text="등록일") # 해당 레코드 생성시 현재 시간 자동 저장
+    modify_dt = models.DateTimeField(auto_now=True, help_text="수정일") # 해당 레코드 갱신시 현재 시간 자동 저장
 
-        member = self.model(
-            mem_id=mem_id
-        )
-        member.set_password(password)
-        member.save(using=self._db)
-        return member
+    class Meta:
+        db_table = 'position_cd'
 
-    def create_superuser(self, mem_id, password=None) :
-        """
-        주어진 mem_id와 password로 Member 인스턴스 생성
-        단, 최상위 사용자이므로 권한을 부여
-        """
-        member = self.create_user(                                
-            mem_id=mem_id,
-            password=password
-        )
-        member.is_admin = True
-        member.save(using=self._db)
-        return member
+    def __str__(self) -> str:
+        return self.position_nm
 
-class Member(AbstractBaseUser):
-    mem_id = models.CharField("사원번호", primary_key=True, max_length=10)
-    mem_name = models.CharField("이름", max_length=10, null=True)
-    mem_birth = models.DateTimeField("생년월일", null=True)
-    mem_mail_addr = models.EmailField("이메일", max_length=100, unique=True, null=True)
-    mem_phone = models.CharField("전화번호", max_length=13, null=True)
-    mem_status = models.BooleanField("계정상태", default=True)
-    is_admin = models.BooleanField("관리자 여부", default=False)
-    team_cd = models.CharField("팀 코드", max_length=10, null=True)
-    auth_cd = models.CharField("권한코드", max_length=10, null=True)
-    position_cd = models.CharField("직책코드", max_length=10, null=True)
-    create_dt = models.DateTimeField("가입일", auto_now_add=True) # 해당 레코드 생성시 현재 시간 자동 저장
-    modify_dt = models.DateTimeField("수정일", auto_now=True) # 해당 레코드 갱신시 현재 시간 자동 저장
-    join_dt = models.DateTimeField("입사일", null=True)
-    resign_dt = models.DateTimeField("퇴사일", null=True)
+# 부서 코드
+class DepartmentCd(models.Model):
+    dept_cd = models.CharField(unique=True, max_length=10, help_text='부서코드')
+    dept_nm = models.CharField(max_length=30, null=True, blank=True, help_text='부서이름')
+    senior_dept_cd = models.CharField(max_length=10, null=True, blank=True, help_text='상급부서 코드')
+    create_dt = models.DateTimeField(auto_now_add=True, help_text='등록일') # 해당 레코드 생성시 현재 시간 자동 저장
+    modify_dt = models.DateTimeField(auto_now=True, help_text='수정일') # 해당 레코드 갱신시 현재 시간 자동 저장
 
-    USERNAME_FIELD = 'mem_id'
+    class Meta:
+        db_table = 'department_cd'
 
-    objects = MemberManager()
+    def __str__(self) -> str:
+        return self.dept_nm
+
+
+class Member(models.Model):
+    mem_id = models.CharField(unique=True, max_length=10, help_text='사원번호')
+    user = models.OneToOneField(User, null=True, blank=True, related_name="member_user_id", on_delete=models.CASCADE)
+    dept_cd = models.ForeignKey(DepartmentCd, null=True, blank=True, related_name='Member', on_delete=models.SET_NULL, help_text='부서코드')
+    position_cd = models.ForeignKey(PositionCd, null=True, blank=True, related_name='Member', on_delete=models.SET_NULL, help_text='직책코드')
+    mem_name = models.CharField(max_length=10, null=True, help_text='사원이름')
+    mem_birth = models.DateTimeField(null=True, help_text='생년월일')
+    mem_mail_addr = models.EmailField(max_length=100, unique=True, null=True, help_text='이메일')
+    mem_phone = models.CharField(max_length=13, null=True, help_text='전화번호')
+    acc_recorder_id = models.CharField(max_length=10, null=False, unique=True, help_text='출입기록 단말기 아이디')
+    create_dt = models.DateTimeField(auto_now_add=True, help_text='등록일') # 해당 레코드 생성시 현재 시간 자동 저장
+    modify_dt = models.DateTimeField(auto_now=True, help_text='수정일') # 해당 레코드 갱신시 현재 시간 자동 저장
+    join_dt = models.DateTimeField(null=True, help_text='입사일')
+    resign_dt = models.DateTimeField(null=True, help_text='퇴사일')
 
     class Meta:
         db_table = 'member'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.mem_name
 
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return self.is_admin
 
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return self.is_admin
 
-    @property
-    def is_staff(self) :
-        return self.is_admin
+
+
+
+
+
+# class PositionMapping(models.Model):
+#     mem_id = models.ForeignKey('Member', related_name='position_mapping', on_delete=models.SET_NULL, null=True)
+#     position_cd = models.ForeignKey('PositionCd', related_name='position_mapping', on_delete=models.SET_NULL, null=True)
+
+#     class Meta:
+#         db_table = 'position_mapping'

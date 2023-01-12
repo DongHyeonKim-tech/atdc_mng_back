@@ -1,23 +1,21 @@
 from rest_framework import serializers
-from members.models import Member as MemberModel
+from .models import Member, PositionCd, DepartmentCd
 
-class MemberSignupSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = MemberModel
+class MemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Member
         fields = "__all__"
 
-    def create(self, *args, **kargs): # 패스워드를 해싱해서 받기 위한 작업
-        member = super().create(*args, **kargs)
-        password = member.password
-        member.set_password(password)
-        member.save()
-        return member
 
-    def update(self, *args, **kargs): # 패스워드를 해싱해서 받기 위한 작업
-        member = super().create(*args, **kargs)
-        password = member.password
-        member.set_password(password)
-        member.save()
-        return member
+class PositionCdSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = PositionCd
+        fields = "__all__"
+
+class DepartmentCdSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = DepartmentCd
+        fields = "__all__"
+
 
 
