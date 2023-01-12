@@ -25,7 +25,6 @@ class Team(models.Model):
 class TeamMembers(models.Model):
     mem_id = models.ForeignKey(Member, related_name='team_members', on_delete=models.SET_NULL, null=True, blank=True, help_text='팀원')
     team_cd = models.ForeignKey(Team, related_name='team_members', on_delete=models.SET_NULL, null=True, blank=True, help_text='팀코드')
-    attd_set_cd = models.ForeignKey(AttendanceSettings, null=True, blank=True, related_name='team_members', on_delete=models.SET_NULL, help_text='근태설정 코드') # FIXME: 근태 셋팅을 어디서 설정해야 할지 좀 더 고민이 필요하다.
     create_dt = models.DateTimeField(auto_now_add=True, help_text="등록일") # 해당 레코드 생성시 현재 시간 자동 저장
     regist_mem_id = models.ForeignKey(Member, related_name='team_members_regist', null=True, blank=True, on_delete=models.SET_NULL, help_text='등록자')
     modify_dt = models.DateTimeField(auto_now=True, help_text="수정일") # 해당 레코드 갱신시 현재 시간 자동 저장
