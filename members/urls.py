@@ -1,6 +1,6 @@
 from django.urls import re_path, path
 from members.views import (
-                            regist_member, 
+                            # regist_member, 
                             # create_position_cd, 
                             # create_department_cd, 
                             PositionsView,
@@ -12,7 +12,7 @@ from members.views import (
 app_name = "members"
 
 urlpatterns = [
-    path("regist_member/", regist_member, name="regist_member"),
+    # path("regist_member/", regist_member, name="regist_member"),
     # path("create_position_cd/", create_position_cd, name="create_position_cd"),
     path("position/", PositionsView.as_view(), name="position"),
     path("position/<int:pk>/", PositionView.as_view(), name="position_detail"),

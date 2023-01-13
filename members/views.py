@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, APIView
 from rest_framework.generics import get_object_or_404
 from .models import Member, PositionCd, DepartmentCd
 from .serializers import (
-                            MemberSerializer, 
+                            MemberCreateSerializer, 
                             PositionCdSerializer, 
                             PositionCdCreateSerializer,
                             DepartmentCdSerializer, 
@@ -103,11 +103,11 @@ class DepartmentView(APIView) :
 
 # ============================================================================
 # 사원
-class MebersView(APIView) :
-    def post(self, request) :
-        """맴버 등록 뷰"""
-        # serializer = 
-        pass
+# class MebersView(APIView) :
+#     def post(self, request) :
+#         """맴버 등록 뷰"""
+#         # serializer = 
+#         pass
 
 # @api_view(["POST"])
 # def regist_member(request):
