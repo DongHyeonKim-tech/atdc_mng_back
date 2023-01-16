@@ -14,8 +14,8 @@ app_name = "members"
 urlpatterns = [
     # path("regist_member/", regist_member, name="regist_member"),
     # path("create_position_cd/", create_position_cd, name="create_position_cd"),
-    path("position/", PositionsView.as_view(), name="position"),
+    path("positions/", PositionsView.as_view(), name="position"),
     path("position/<int:pk>/", PositionView.as_view(), name="position_detail"),
-    path("department/", DepartmentsView.as_view(), name="department"),
-    path("department/<int:pk>/", DepartmentView.as_view(), name="department_detail"),
+    path("depts/", DepartmentsView.as_view(), name="department"),
+    path("dept/<int:pk>/", DepartmentView.as_view(), name="department_detail"),
 ]

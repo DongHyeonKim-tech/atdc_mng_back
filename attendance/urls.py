@@ -1,10 +1,20 @@
 from django.urls import re_path, path
-from attendance.views import create_acc_recorder_info, create_attd_status_cd, edit_attd_status_cd
+from attendance.views import  (
+                                AccRecorderInfoView, 
+                                AccRecorderInfoDetailView,
+                                AttdStatusCdView,
+                                AttdStatusCdDetailView,
+                                TopAttdStatusCdView,
+                                TopAttdStatusCdDetailView
+                            )
 
 app_name = "attendance"
 
 urlpatterns = [
-    path('create_acc_recorder_info/', create_acc_recorder_info, name='create_acc_recorder_info'),
-    path('create_attd_status_cd/', create_attd_status_cd, name='create_attd_status_cd'),
-    path('edit_attd_status_cd/', edit_attd_status_cd, name='edit_attd_status_cd'),
+    path('recs/', AccRecorderInfoView.as_view(), name='acc_recorder'),
+    path('rec/<int:recorder_id>/', AccRecorderInfoDetailView.as_view(), name='acc_recorder'),
+    path('attdcds/', AttdStatusCdView.as_view(), name='attd_cd'),
+    path('attdcd/<str:attd_cd_id>/', AttdStatusCdDetailView.as_view(), name='attd_cd'),
+    path('topcds/', TopAttdStatusCdView.as_view()),
+    path('topcd/<str:attd_cd_id>/', TopAttdStatusCdDetailView.as_view()),
 ]

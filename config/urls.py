@@ -34,9 +34,9 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     
     # app path
-    path('authority/', include('authority.urls')),
+    path('auth/', include('authority.urls')),
     path('members/', include('members.urls')),
-    path('attendance/', include('attendance.urls')),
+    path('attd/', include('attendance.urls')),
     path('teams/', include('teams.urls')),
 ]
 
